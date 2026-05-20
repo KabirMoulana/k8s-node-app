@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # fix: Node.js 20 deprecation
 
 jobs:
   # ─── Job 1: Test ───────────────────────────────────────────────
@@ -28,7 +29,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: app/package-lock.json   # fix: only works once lockfile exists
 
       - name: Install dependencies
         run: npm ci
