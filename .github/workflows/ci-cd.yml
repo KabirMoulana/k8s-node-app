@@ -9,10 +9,9 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # fix: Node.js 20 deprecation
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  # ─── Job 1: Test ───────────────────────────────────────────────
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -28,8 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: app/package-lock.json   # fix: only works once lockfile exists
 
       - name: Install dependencies
         run: npm ci
@@ -43,7 +40,6 @@ jobs:
           name: coverage-report
           path: app/coverage/
 
-  # ─── Job 2: Build & Push Docker Image ─────────────────────────
   build:
     name: Build & Push Image
     runs-on: ubuntu-latest
@@ -91,7 +87,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ─── Job 3: Deploy to Kubernetes ──────────────────────────────
   deploy:
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
